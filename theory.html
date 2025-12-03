@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroFlow - Theory & Formulas</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- MathJax for equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-book"></i>
+                <h1>HydroFlow Theory</h1>
+            </div>
+            
+            <div class="header-controls">
+                <a href="index.html" class="btn-calculator">
+                    <i class="fas fa-calculator"></i> Back to Calculator
+                </a>
+                
+                <button id="themeToggle" class="btn-theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="theory-container">
+        <!-- Navigation Sidebar -->
+        <aside class="theory-sidebar">
+            <h3><i class="fas fa-bars"></i> Contents</h3>
+            <nav class="theory-nav">
+                <a href="#introduction" class="nav-item active">
+                    <i class="fas fa-info-circle"></i> Introduction
+                </a>
+                <a href="#formulas" class="nav-item">
+                    <i class="fas fa-calculator"></i> Key Formulas
+                </a>
+                <a href="#manning" class="nav-item">
+                    <i class="fas fa-water"></i> Manning's Equation
+                </a>
+                <a href="#critical" class="nav-item">
+                    <i class="fas fa-exclamation-triangle"></i> Critical Flow
+                </a>
+                <a href="#jump" class="nav-item">
+                    <i class="fas fa-wave-square"></i> Hydraulic Jump
+                </a>
+                <a href="#energy" class="nav-item">
+                    <i class="fas fa-bolt"></i> Specific Energy
+                </a>
+                <a href="#examples" class="nav-item">
+                    <i class="fas fa-flask"></i> Examples
+                </a>
+                <a href="#references" class="nav-item">
+                    <i class="fas fa-book"></i> References
+                </a>
+            </nav>
+            
+            <div class="theory-tools">
+                <h4><i class="fas fa-tools"></i> Quick Tools</h4>
+                <button class="tool-btn" onclick="calculateExample()">
+                    <i class="fas fa-calculator"></i> Example Calculation
+                </button>
+                <button class="tool-btn" onclick="toggleAllSections()">
+                    <i class="fas fa-expand"></i> Expand All
+                </button>
+                <button class="tool-btn" onclick="downloadTheory()">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        </aside>
+
+        <!-- Theory Content -->
+        <main class="theory-content">
+            <!-- Introduction -->
+            <section id="introduction" class="theory-section active">
+                <h2><i class="fas fa-info-circle"></i> 1. Introduction to Open-Channel Hydraulics</h2>
+                
+                <div class="section-content">
+                    <p><strong>Open-channel flow</strong> refers to the flow of liquids in channels where the surface is exposed to the atmosphere. This includes:</p>
+                    
+                    <div class="examples-grid">
+                        <div class="example-card">
+                            <i class="fas fa-river"></i>
+                            <h4>Natural Channels</h4>
+                            <p>Rivers, streams, creeks</p>
+                        </div>
+                        <div class="example-card">
+                            <i class="fas fa-road"></i>
+                            <h4>Artificial Channels</h4>
+                            <p>Canals, drainage ditches</p>
+                        </div>
+                        <div class="example-card">
+                            <i class="fas fa-building"></i>
+                            <h4>Urban Systems</h4>
+                            <p>Storm sewers, culverts</p>
+                        </div>
+                        <div class="example-card">
+                            <i class="fas fa-industry"></i>
+                            <h4>Industrial</h4>
+                            <p>Wastewater treatment</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Key Concepts</h3>
+                    
+                    <div class="concept-box">
+                        <div class="concept">
+                            <div class="concept-icon">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            <div class="concept-text">
+                                <h4>Steady vs Unsteady Flow</h4>
+                                <p><strong>Steady flow:</strong> Discharge constant with time<br>
+                                <strong>Unsteady flow:</strong> Discharge varies with time</p>
+                            </div>
+                        </div>
+                        
+                        <div class="concept">
+                            <div class="concept-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="concept-text">
+                                <h4>Uniform vs Varied Flow</h4>
+                                <p><strong>Uniform flow:</strong> Depth constant along channel<br>
+                                <strong>Varied flow:</strong> Depth changes along channel</p>
+                            </div>
+                        </div>
+                        
+                        <div class="concept">
+                            <div class="concept-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <div class="concept-text">
+                                <h4>Laminar vs Turbulent</h4>
+                                <p><strong>Laminar:</strong> Smooth, layered flow (Re &lt; 500)<br>
+                                <strong>Turbulent:</strong> Chaotic, mixed flow (Re &gt; 2000)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Formulas -->
+            <section id="formulas" class="theory-section">
+                <h2><i class="fas fa-calculator"></i> 2. Key Formulas & Equations</h2>
+                
+                <div class="section-content">
+                    <div class="formula-grid">
+                        <!-- Flow Area -->
+                        <div class="formula-card">
+                            <div class="formula-header">
+                                <i class="fas fa-vector-square"></i>
+                                <h3>Flow Area</h3>
+                            </div>
+                            <div class="formula-body">
+                                <div class="formula-display">
+                                    $$A = b \times y$$
+                                </div>
+                                <div class="formula-variables">
+                                    <p><strong>Where:</strong></p>
+                                    <ul>
+                                        <li>\(A\) = Cross-sectional area (m²)</li>
+                                        <li>\(b\) = Channel width (m)</li>
+                                        <li>\(y\) = Flow depth (m)</li>
+                                    </ul>
+                                </div>
+                                <div class="formula-diagram">
+                                    <div class="channel-diagram">
+                                        <div class="channel-bottom"></div>
+                                        <div class="water-surface"></div>
+                                        <div class="dimension width">b</div>
+                                        <div class="dimension depth">y</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wetted Perimeter -->
+                        <div class="formula-card">
+                            <div class="formula-header">
+                                <i class="fas fa-ruler-combined"></i>
+                                <h3>Wetted Perimeter</h3>
+                            </div>
+                            <div class="formula-body">
+                                <div class="formula-display">
+                                    $$P = b + 2y$$
+                                </div>
+                                <div class="formula-variables">
+                                    <p><strong>Where:</strong></p>
+                                    <ul>
+                                        <li>\(P\) = Wetted perimeter (m)</li>
+                                        <li>\(b\) = Channel width (m)</li>
+                                        <li>\(y\) = Flow depth (m)</li>
+                                    </ul>
+                                </div>
+                                <div class="formula-note">
+                                    <p><i class="fas fa-info-circle"></i> For rectangular channels only</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hydraulic Radius -->
+                        <div class="formula-card">
+                            <div class="formula-header">
+                                <i class="fas fa-divide"></i>
+                                <h3>Hydraulic Radius</h3>
+                            </div>
+                            <div class="formula-body">
+                                <div class="formula-display">
+                                    $$R = \frac{A}{P}$$
+                                </div>
+                                <div class="formula-variables">
+                                    <p><strong>Where:</strong></p>
+                                    <ul>
+                                        <li>\(R\) = Hydraulic radius (m)</li>
+                                        <li>\(A\) = Flow area (m²)</li>
+                                        <li>\(P\) = Wetted perimeter (m)</li>
+                                    </ul>
+                                </div>
+                                <div class="formula-note">
+                                    <p><i class="fas fa-lightbulb"></i> Characteristic length for flow resistance</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Velocity -->
+                        <div class="formula-card">
+                            <div class="formula-header">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <h3>Flow Velocity</h3>
+                            </div>
+                            <div class="formula-body">
+                                <div class="formula-display">
+                                    $$V = \frac{Q}{A}$$
+                                </div>
+                                <div class="formula-variables">
+                                    <p><strong>Where:</strong></p>
+                                    <ul>
+                                        <li>\(V\) = Mean velocity (m/s)</li>
+                                        <li>\(Q\) = Discharge (m³/s)</li>
+                                        <li>\(A\) = Flow area (m²)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manning's Equation -->
+            <section id="manning" class="theory-section">
+                <h2><i class="fas fa-water"></i> 3. Manning's Equation</h2>
+                
+                <div class="section-content">
+                    <div class="formula-main">
+                        <div class="formula-large">
+                            $$Q = \frac{1}{n} A R^{2/3} S^{1/2}$$
+                        </div>
+                        
+                        <div class="formula-explanation">
+                            <p>The <strong>Manning equation</strong> is the most commonly used formula for uniform flow in open channels.</p>
+                            
+                            <div class="variables-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Symbol</th>
+                                            <th>Variable</th>
+                                            <th>Units</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>\(Q\)</td>
+                                            <td>Discharge</td>
+                                            <td>m³/s</td>
+                                            <td>Volumetric flow rate</td>
+                                        </tr>
+                                        <tr>
+                                            <td>\(n\)</td>
+                                            <td>Manning's n</td>
+                                            <td>-</td>
+                                            <td>Roughness coefficient</td>
+                                        </tr>
+                                        <tr>
+                                            <td>\(A\)</td>
+                                            <td>Area</td>
+                                            <td>m²</td>
+                                            <td>Cross-sectional area</td>
+                                        </tr>
+                                        <tr>
+                                            <td>\(R\)</td>
+                                            <td>Hydraulic radius</td>
+                                            <td>m</td>
+                                            <td>A/P</td>
+                                        </tr>
+                                        <tr>
+                                            <td>\(S\)</td>
+                                            <td>Slope</td>
+                                            <td>m/m</td>
+                                            <td>Energy gradient</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <h3>Manning's n Values</h3>
+                        
+                        <div class="n-values">
+                            <div class="n-category">
+                                <h4><i class="fas fa-smooth"></i> Smooth Surfaces</h4>
+                                <ul>
+                                    <li>Glass, PVC: 0.009 - 0.011</li>
+                                    <li>Concrete (finished): 0.012 - 0.014</li>
+                                    <li>Wood (planed): 0.010 - 0.015</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="n-category">
+                                <h4><i class="fas fa-normal"></i> Normal Surfaces</h4>
+                                <ul>
+                                    <li>Earth (straight): 0.020 - 0.025</li>
+                                    <li>Gravel: 0.025 - 0.030</li>
+                                    <li>Rock cut: 0.030 - 0.035</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="n-category">
+                                <h4><i class="fas fa-rough"></i> Rough Surfaces</h4>
+                                <ul>
+                                    <li>Earth (winding): 0.025 - 0.035</li>
+                                    <li>Natural streams: 0.030 - 0.050</li>
+                                    <li>Heavy vegetation: 0.050 - 0.150</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Critical Flow -->
+            <section id="critical" class="theory-section">
+                <h2><i class="fas fa-exclamation-triangle"></i> 4. Critical Flow & Froude Number</h2>
+                
+                <div class="section-content">
+                    <div class="critical-content">
+                        <div class="critical-formulas">
+                            <div class="formula-box">
+                                <h3>Critical Depth (Rectangular)</h3>
+                                <div class="formula-display">
+                                    $$y_c = \sqrt[3]{\frac{Q^2}{g b^2}}$$
+                                </div>
+                            </div>
+                            
+                            <div class="formula-box">
+                                <h3>Froude Number</h3>
+                                <div class="formula-display">
+                                    $$Fr = \frac{V}{\sqrt{g y}}$$
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Flow Classification by Froude Number</h3>
+                        
+                        <div class="flow-types">
+                            <div class="flow-type subcritical">
+                                <div class="flow-header">
+                                    <i class="fas fa-water"></i>
+                                    <h4>Subcritical Flow</h4>
+                                    <span class="flow-fr">Fr &lt; 1</span>
+                                </div>
+                                <div class="flow-content">
+                                    <p><strong>Characteristics:</strong></p>
+                                    <ul>
+                                        <li>Tranquil, slow flow</li>
+                                        <li>Deep water surface</li>
+                                        <li>Downstream control</li>
+                                        <li>Disturbances travel upstream</li>
+                                    </ul>
+                                    <p><strong>Typical in:</strong> Rivers, mild slopes</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flow-type critical">
+                                <div class="flow-header">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <h4>Critical Flow</h4>
+                                    <span class="flow-fr">Fr = 1</span>
+                                </div>
+                                <div class="flow-content">
+                                    <p><strong>Characteristics:</strong></p>
+                                    <ul>
+                                        <li>Minimum specific energy</li>
+                                        <li>Unstable transition</li>
+                                        <li>Maximum discharge for given energy</li>
+                                        <li>Occurs at control sections</li>
+                                    </ul>
+                                    <p><strong>Typical in:</strong> Weirs, crests, transitions</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flow-type supercritical">
+                                <div class="flow-header">
+                                    <i class="fas fa-bolt"></i>
+                                    <h4>Supercritical Flow</h4>
+                                    <span class="flow-fr">Fr &gt; 1</span>
+                                </div>
+                                <div class="flow-content">
+                                    <p><strong>Characteristics:</strong></p>
+                                    <ul>
+                                        <li>Rapid, shooting flow</li>
+                                        <li>Shallow water surface</li>
+                                        <li>Upstream control</li>
+                                        <li>Disturbances travel downstream</li>
+                                    </ul>
+                                    <p><strong>Typical in:</strong> Steep chutes, spillways</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hydraulic Jump -->
+            <section id="jump" class="theory-section">
+                <h2><i class="fas fa-wave-square"></i> 5. Hydraulic Jump Analysis</h2>
+                
+                <div class="section-content">
+                    <div class="jump-content">
+                        <div class="jump-diagram">
+                            <div class="jump-visualization">
+                                <div class="jump-upstream">
+                                    <div class="flow-arrow">→</div>
+                                    <div class="depth-label">y₁</div>
+                                    <div class="froude-label">Fr₁ > 1</div>
+                                </div>
+                                <div class="jump-zone">
+                                    <div class="turbulence">🌀</div>
+                                    <div class="jump-label">HYDRAULIC JUMP</div>
+                                </div>
+                                <div class="jump-downstream">
+                                    <div class="flow-arrow">→</div>
+                                    <div class="depth-label">y₂</div>
+                                    <div class="froude-label">Fr₂ < 1</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="jump-formulas">
+                            <div class="formula-box">
+                                <h3>Sequent Depth (Belanger)</h3>
+                                <div class="formula-display">
+                                    $$y_2 = \frac{y_1}{2} \left( \sqrt{1 + 8 Fr_1^2} - 1 \right)$$
+                                </div>
+                            </div>
+                            
+                            <div class="formula-box">
+                                <h3>Energy Loss</h3>
+                                <div class="formula-display">
+                                    $$\Delta E = \frac{(y_2 - y_1)^3}{4 y_1 y_2}$$
+                                </div>
+                            </div>
+                            
+                            <div class="formula-box">
+                                <h3>Jump Length</h3>
+                                <div class="formula-display">
+                                    $$L_j \approx 6(y_2 - y_1)$$
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Applications of Hydraulic Jump</h3>
+                        
+                        <div class="applications">
+                            <div class="app-card">
+                                <i class="fas fa-fan"></i>
+                                <h4>Energy Dissipation</h4>
+                                <p>Reduces flow energy to prevent erosion</p>
+                            </div>
+                            
+                            <div class="app-card">
+                                <i class="fas fa-recycle"></i>
+                                <h4>Mixing</h4>
+                                <p>Enhances mixing of chemicals or air</p>
+                            </div>
+                            
+                            <div class="app-card">
+                                <i class="fas fa-shield-alt"></i>
+                                <h4>Flow Control</h4>
+                                <p>Maintains subcritical flow downstream</p>
+                            </div>
+                            
+                            <div class="app-card">
+                                <i class="fas fa-water"></i>
+                                <h4>Aeration</h4>
+                                <p>Increases dissolved oxygen in water</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Specific Energy -->
+            <section id="energy" class="theory-section">
+                <h2><i class="fas fa-bolt"></i> 6. Specific Energy Concept</h2>
+                
+                <div class="section-content">
+                    <div class="energy-content">
+                        <div class="energy-definition">
+                            <div class="formula-large">
+                                $$E = y + \frac{V^2}{2g} = y + \frac{Q^2}{2g A^2}$$
+                            </div>
+                            
+                            <div class="energy-explanation">
+                                <p><strong>Specific Energy (E)</strong> is the energy per unit weight of water measured relative to the channel bottom.</p>
+                                
+                                <div class="energy-components">
+                                    <div class="component">
+                                        <div class="component-icon">
+                                            <i class="fas fa-arrows-alt-v"></i>
+                                        </div>
+                                        <div class="component-text">
+                                            <h4>Pressure Head (y)</h4>
+                                            <p>Depth of flow = static pressure energy</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="component">
+                                        <div class="component-icon">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                        </div>
+                                        <div class="component-text">
+                                            <h4>Velocity Head (V²/2g)</h4>
+                                            <p>Kinetic energy due to flow velocity</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Specific Energy Diagram</h3>
+                        
+                        <div class="energy-diagram">
+                            <div class="diagram-explanation">
+                                <p>The specific energy diagram shows the relationship between flow depth and energy:</p>
+                                
+                                <div class="diagram-features">
+                                    <div class="feature">
+                                        <div class="feature-marker critical"></div>
+                                        <div class="feature-text">
+                                            <h4>Critical Point</h4>
+                                            <p>Minimum energy for given discharge</p>
+                                            <p>Occurs at critical depth (y = y_c)</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="feature">
+                                        <div class="feature-marker subcritical"></div>
+                                        <div class="feature-text">
+                                            <h4>Subcritical Branch</h4>
+                                            <p>Upper limb of the curve</p>
+                                            <p>Deep, slow flow (Fr &lt; 1)</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="feature">
+                                        <div class="feature-marker supercritical"></div>
+                                        <div class="feature-text">
+                                            <h4>Supercritical Branch</h4>
+                                            <p>Lower limb of the curve</p>
+                                            <p>Shallow, fast flow (Fr &gt; 1)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="energy-note">
+                                    <p><i class="fas fa-lightbulb"></i> <strong>Key Insight:</strong> For a given specific energy (except minimum), there are two possible depths: one subcritical and one supercritical. These are called <strong>alternate depths</strong>.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="diagram-visual">
+                                <canvas id="theoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Examples -->
+            <section id="examples" class="theory-section">
+                <h2><i class="fas fa-flask"></i> 7. Example Calculations</h2>
+                
+                <div class="section-content">
+                    <div class="example-content">
+                        <div class="example-problem">
+                            <h3>Example 1: Normal Depth Calculation</h3>
+                            
+                            <div class="problem-statement">
+                                <p><strong>Given:</strong></p>
+                                <ul>
+                                    <li>Discharge Q = 5.0 m³/s</li>
+                                    <li>Channel width b = 2.0 m</li>
+                                    <li>Channel slope S₀ = 0.001</li>
+                                    <li>Manning's n = 0.025</li>
+                                </ul>
+                                
+                                <p><strong>Find:</strong> Normal depth y_n</p>
+                            </div>
+                            
+                            <div class="problem-solution">
+                                <h4>Solution:</h4>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 1:</strong> Assume initial depth y = 1.0 m</p>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 2:</strong> Calculate area A = b × y = 2.0 × 1.0 = 2.0 m²</p>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 3:</strong> Calculate wetted perimeter P = b + 2y = 2.0 + 2×1.0 = 4.0 m</p>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 4:</strong> Calculate hydraulic radius R = A/P = 2.0/4.0 = 0.5 m</p>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 5:</strong> Calculate discharge using Manning:</p>
+                                    <div class="formula-step">
+                                        $$Q = \frac{1}{0.025} × 2.0 × (0.5)^{2/3} × (0.001)^{1/2}$$
+                                        $$Q = 40 × 2.0 × 0.63 × 0.0316 ≈ 1.59 \text{ m³/s}$$
+                                    </div>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 6:</strong> Since Q_calc (1.59) &lt; Q_target (5.0), increase y and repeat</p>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 7:</strong> After iteration: y_n ≈ 1.85 m</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="example-problem">
+                            <h3>Example 2: Hydraulic Jump</h3>
+                            
+                            <div class="problem-statement">
+                                <p><strong>Given:</strong></p>
+                                <ul>
+                                    <li>Upstream depth y₁ = 0.5 m</li>
+                                    <li>Upstream Froude Fr₁ = 3.0</li>
+                                    <li>Channel width b = 3.0 m</li>
+                                </ul>
+                                
+                                <p><strong>Find:</strong> Sequent depth y₂ and energy loss ΔE</p>
+                            </div>
+                            
+                            <div class="problem-solution">
+                                <h4>Solution:</h4>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 1:</strong> Calculate sequent depth using Belanger's equation:</p>
+                                    <div class="formula-step">
+                                        $$y_2 = \frac{0.5}{2} \left( \sqrt{1 + 8 × 3.0^2} - 1 \right)$$
+                                        $$y_2 = 0.25 × \left( \sqrt{1 + 72} - 1 \right)$$
+                                        $$y_2 = 0.25 × (8.544 - 1) ≈ 1.886 \text{ m}$$
+                                    </div>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 2:</strong> Calculate energy loss:</p>
+                                    <div class="formula-step">
+                                        $$\Delta E = \frac{(1.886 - 0.5)^3}{4 × 0.5 × 1.886}$$
+                                        $$\Delta E = \frac{1.386^3}{3.772} ≈ \frac{2.662}{3.772} ≈ 0.706 \text{ m}$$
+                                    </div>
+                                </div>
+                                
+                                <div class="solution-step">
+                                    <p><strong>Step 3:</strong> Interpret results:</p>
+                                    <ul>
+                                        <li>Depth increases from 0.5 m to 1.89 m</li>
+                                        <li>Energy loss of 0.71 m (dissipated as turbulence)</li>
+                                        <li>Flow changes from supercritical to subcritical</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-problems">
+                            <h3>Practice Problems</h3>
+                            
+                            <div class="practice-grid">
+                                <div class="practice-card">
+                                    <h4>Problem 1</h4>
+                                    <p>Q = 10 m³/s, b = 4 m, S = 0.002, n = 0.03</p>
+                                    <p><strong>Find:</strong> Normal depth y_n</p>
+                                    <button class="btn-check" onclick="checkAnswer(1)">Check Answer</button>
+                                    <div class="answer" id="answer1"></div>
+                                </div>
+                                
+                                <div class="practice-card">
+                                    <h4>Problem 2</h4>
+                                    <p>y₁ = 0.3 m, Fr₁ = 4.0</p>
+                                    <p><strong>Find:</strong> Sequent depth y₂</p>
+                                    <button class="btn-check" onclick="checkAnswer(2)">Check Answer</button>
+                                    <div class="answer" id="answer2"></div>
+                                </div>
+                                
+                                <div class="practice-card">
+                                    <h4>Problem 3</h4>
+                                    <p>Q = 8 m³/s, b = 3 m</p>
+                                    <p><strong>Find:</strong> Critical depth y_c</p>
+                                    <button class="btn-check" onclick="checkAnswer(3)">Check Answer</button>
+                                    <div class="answer" id="answer3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- References -->
+            <section id="references" class="theory-section">
+                <h2><i class="fas fa-book"></i> 8. References & Further Reading</h2>
+                
+                <div class="section-content">
+                    <div class="references-content">
+                        <div class="reference-books">
+                            <h3>Recommended Textbooks</h3>
+                            
+                            <div class="book-list">
+                                <div class="book-card">
+                                    <div class="book-icon">
+                                        <i class="fas fa-book-open"></i>
+                                    </div>
+                                    <div class="book-info">
+                                        <h4>Open-Channel Hydraulics</h4>
+                                        <p class="book-author">Ven Te Chow</p>
+                                        <p class="book-desc">Classic reference for open-channel flow</p>
+                                        <span class="book-year">1959</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="book-card">
+                                    <div class="book-icon">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <div class="book-info">
+                                        <h4>Fluid Mechanics</h4>
+                                        <p class="book-author">Frank M. White</p>
+                                        <p class="book-desc">Comprehensive fluid mechanics textbook</p>
+                                        <span class="book-year">2011</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="book-card">
+                                    <div class="book-icon">
+                                        <i class="fas fa-water"></i>
+                                    </div>
+                                    <div class="book-info">
+                                        <h4>Hydraulic Engineering</h4>
+                                        <p class="book-author">John A. Roberson et al.</p>
+                                        <p class="book-desc">Practical engineering applications</p>
+                                        <span class="book-year">1998</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="reference-standards">
+                            <h3>Engineering Standards</h3>
+                            
+                            <ul class="standards-list">
+                                <li><i class="fas fa-file-alt"></i> ASCE/EWRI 7-22: Standard Guidelines for Hydraulic Models</li>
+                                <li><i class="fas fa-file-alt"></i> USBR Design Standards: Canal and Channel Design</li>
+                                <li><i class="fas fa-file-alt"></i> Eurocode 7: Geotechnical Design</li>
+                                <li><i class="fas fa-file-alt"></i> ASTM D5084: Hydraulic Conductivity of Saturated Soils</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="reference-software">
+                            <h3>Related Software</h3>
+                            
+                            <div class="software-grid">
+                                <div class="software-card">
+                                    <i class="fas fa-desktop"></i>
+                                    <h4>HEC-RAS</h4>
+                                    <p>River analysis system by US Army Corps</p>
+                                </div>
+                                
+                                <div class="software-card">
+                                    <i class="fas fa-desktop"></i>
+                                    <h4>SWMM</h4>
+                                    <p>Storm Water Management Model</p>
+                                </div>
+                                
+                                <div class="software-card">
+                                    <i class="fas fa-desktop"></i>
+                                    <h4>MIKE 11</h4>
+                                    <p>River modelling software</p>
+                                </div>
+                                
+                                <div class="software-card">
+                                    <i class="fas fa-desktop"></i>
+                                    <h4>EPANET</h4>
+                                    <p>Water distribution modelling</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="reference-online">
+                            <h3>Online Resources</h3>
+                            
+                            <div class="online-links">
+                                <a href="https://www.usbr.gov/" class="online-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    US Bureau of Reclamation
+                                </a>
+                                
+                                <a href="https://www.hec.usace.army.mil/" class="online-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    HEC Software
+                                </a>
+                                
+                                <a href="https://www.asce.org/" class="online-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    ASCE Publications
+                                </a>
+                                
+                                <a href="https://www.epa.gov/" class="online-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    EPA Water Resources
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-info">
+                <span><i class="fas fa-graduation-cap"></i> Educational Tool</span>
+                <span><i class="fas fa-code"></i> HydroFlow Theory v2.0</span>
+                <span><i class="fas fa-calendar"></i> © 2024</span>
+            </div>
+            
+            <div class="footer-links">
+                <a href="index.html"><i class="fas fa-calculator"></i> Calculator</a>
+                <a href="#" onclick="window.print()"><i class="fas fa-print"></i> Print</a>
+                <a href="#" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i> Top</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script src="theory.js"></script>
+</body>
+</html>
