@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroFlow - Open Channel Hydraulics Calculator</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-water"></i>
+                <h1>HydroFlow</h1>
+                <span class="version">v2.0</span>
+            </div>
+            
+            <div class="header-controls">
+                <a href="theory.html" class="btn-theory">
+                    <i class="fas fa-book"></i> Theory & Formulas
+                </a>
+                
+                <button id="themeToggle" class="btn-theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <button class="btn-help" onclick="showHelp()">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h2><i class="fas fa-sliders-h"></i> Input Parameters</h2>
+                
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Discharge Q (m³/s)</span>
+                    </div>
+                    <input type="number" id="Q" value="2.0" step="0.1" min="0.1" max="100">
+                    <div class="input-hint">Typical: 0.1 - 100 m³/s</div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-arrows-alt-h"></i>
+                        <span>Channel Width b (m)</span>
+                    </div>
+                    <input type="number" id="b" value="1.5" step="0.1" min="0.1" max="50">
+                    <div class="input-hint">Typical: 0.5 - 50 m</div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-angle-down"></i>
+                        <span>Slope S₀ (m/m)</span>
+                    </div>
+                    <input type="number" id="S0" value="0.001" step="0.0001" min="0.0001" max="0.1">
+                    <div class="input-hint">Typical: 0.0001 - 0.1</div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-mountain"></i>
+                        <span>Manning's n</span>
+                    </div>
+                    <input type="number" id="n" value="0.025" step="0.001" min="0.01" max="0.1">
+                    <div class="input-hint">Smooth: 0.012, Rough: 0.035</div>
+                </div>
+                
+                <h3><i class="fas fa-wave-square"></i> Hydraulic Jump</h3>
+                
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-water"></i>
+                        <span>Upstream Depth y₁ (m)</span>
+                    </div>
+                    <input type="number" id="y1" value="0.2" step="0.05" min="0.01" max="10">
+                    <div class="input-hint">Depth before jump</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-calculate" onclick="computeResults()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                    
+                    <button class="btn-reset" onclick="resetInputs()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                    
+                    <button class="btn-export" onclick="exportResults()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+                
+                <!-- Quick Results -->
+                <div class="quick-results" id="quickResults">
+                    <h3><i class="fas fa-bolt"></i> Quick Results</h3>
+                    <div class="result-item">
+                        <span>Critical Depth:</span>
+                        <span id="quickYc">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Normal Depth:</span>
+                        <span id="quickYn">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Froude Number:</span>
+                        <span id="quickFr">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Channel Visualization -->
+            <div class="visualization">
+                <h3><i class="fas fa-project-diagram"></i> Channel Diagram</h3>
+                <div class="diagram">
+                    <canvas id="channelDiagram"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Results Panel -->
+            <div class="results-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-clipboard-check"></i> Analysis Results</h2>
+                    <div class="status-badge" id="flowStatus">Not Calculated</div>
+                </div>
+                
+                <div class="results-container">
+                    <pre id="output">Click Calculate to see results...</pre>
+                    
+                    <div class="detailed-results" id="detailedResults">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Energy Chart -->
+            <div class="chart-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-chart-line"></i> Specific Energy Diagram</h2>
+                    <div class="chart-controls">
+                        <button onclick="toggleChartType()">
+                            <i class="fas fa-exchange-alt"></i> Switch View
+                        </button>
+                        <button onclick="downloadChart()">
+                            <i class="fas fa-download"></i> Save Chart
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Step-by-Step Calculations -->
+            <div class="steps-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-list-ol"></i> Calculation Steps</h2>
+                </div>
+                
+                <div class="steps-container">
+                    <ol id="stepResults">
+                        <li>Enter parameters in the left panel</li>
+                        <li>Click "Calculate" to run analysis</li>
+                        <li>View results and energy diagram</li>
+                        <li>Check flow regime and safety</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-info">
+                <span><i class="fas fa-code"></i> HydroFlow v2.0</span>
+                <span><i class="fas fa-user"></i> Engineering Tool</span>
+                <span><i class="fas fa-calendar"></i> 2024</span>
+            </div>
+            
+            <div class="footer-links">
+                <a href="theory.html"><i class="fas fa-book"></i> Theory</a>
+                <a href="#" onclick="showHelp()"><i class="fas fa-question-circle"></i> Help</a>
+                <a href="#" onclick="showAbout()"><i class="fas fa-info-circle"></i> About</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
